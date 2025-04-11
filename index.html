@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script
+      src="https://kit.fontawesome.com/c4254e24a8.js"
+      crossorigin="anonymous"
+    ></script>
+    <title>Prashant's Portfolio</title>
+    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="css/global.css" />
+  </head>
+  <body>
+    <div class="header">
+      <nav class="mobile-nav-bar">
+        <img src="images/logo.png" class="mobile-user-img" />
+        <div class="menu-toggle" onclick="toggleSidebar()">
+          <i class="fa-solid fa-bars"></i>
+        </div>
+      </nav>
+      <div class="side-nav">
+        <div class="user">
+          <img src="images/PPT.jpg" class="user-img" />
+          <!-- <div class="overlay">My Name is John</div> -->
+        </div>
+
+        <ul class="nav-links">
+          <li class="active">
+            <a href="#" onclick="window.location.href='index.html'"
+              ><i class="fa-solid fa-house"></i>
+              <span class="link-text">Home</span></a
+            >
+          </li>
+
+          <li>
+            <a href="#" onclick="window.location.href='portfolio.html'"
+              ><i class="fa-solid fa-layer-group"></i
+              ><span class="link-text">Portfolio</span></a
+            >
+          </li>
+          <li>
+            <a href="#" onclick="window.location.href='cv.html'"
+              ><i class="fa-solid fa-file-lines"></i
+              ><span class="link-text">CV</span></a
+            >
+          </li>
+          <li>
+            <a href="#" onclick="window.location.href='Clients.html'"
+              ><i class="fa-solid fa-user-group"></i
+              ><span class="link-text">Clients</span></a
+            >
+          </li>
+          <li>
+            <a href="#" onclick="window.location.href='contact.html'"
+              ><i class="fa-solid fa-message"></i>
+              <span class="link-text">Contact</span></a
+            >
+          </li>
+          <li>
+            <a href="#" onclick="window.location.href='contact.html'"
+              ><i class="fa-solid fa-message"></i>
+              <span class="link-text">Contact</span></a
+            >
+          </li>
+        </ul>
+        <hr class="line" />
+        <div class="social-section">
+          <p class="para">Find With Me</p>
+          <div class="social-icons">
+            <a href="https://www.instagram.com/timalsinapratik007/"
+              ><i class="fa-brands fa-instagram"></i
+            ></a>
+            <a
+              href="https://www.linkedin.com/in/prashant-pratik-timalsina-906327335/"
+              ><i class="fa-brands fa-linkedin-in"></i
+            ></a>
+            <a href="#"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://github.com/pratikprashant"
+              ><i class="fa-brands fa-github"></i
+            ></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="content">
+      <img src="images/home.png" width="350" class="myphoto" />
+      <img src="images/thomas.jpg" width="350" class="small-home" />
+      <div class="details">
+        <h1 class="starter-home">Hello</h1>
+        <p class="name">I'm <span class="fullname">Prashant Pratik</span></p>
+        <p class="pro">A <span id="typing" class="typing-text"></span></p>
+        <p class="detail">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti
+          dolore nesciunt, dolor consequatur modi perspiciatis quis inventore
+          ducimus, ratione laudantium ipsa, natus iure saepe cumque eaque?
+          Impedit hic, a possimus quod, veniam in numquam modi expedita
+          blanditiis at dolorum excepturi.
+        </p>
+        <button class="btn" onclick="window.location.href='portfolio.html'">
+          View Projects <i class="fa-solid fa-arrow-right"></i>
+        </button>
+      </div>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/list.css" />
+    <link rel="stylesheet" href="css/global.css" />
+  </head>
+
+  <body>
+    <div class="wholepage">
+      <nav class="navbar">
+        <img src="images/logo.png" width="50" alt="Logo" />
+        <ul class="links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="list.html">List</a></li>
+        </ul>
+      </nav>
+
+      <div class="expense-container">
+        <div class="expense-table">
+          <table>
+            <thead>
+              <tr>
+                <th class="en">Expense Name</th>
+                <th class="am">Amount</th>
+                <th class="ct">Category</th>
+                <th class="dc">Debit/Credit</th>
+                <th class="dt">Date</th>
+                <th class="at">Action</th>
+              </tr>
+            </thead>
+            <tbody id="expense-list"></tbody>
+          </table>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="expenseChart" width="300" height="300"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="popup" id="popup">
+      <img src="images/alert.jpg" alt="Alert" />
+      <h2>Alert!</h2>
+      <p>Are you sure?</p>
+      <button id="btnSuccess" type="button" onclick="closePopup(true)">
+        Yes
+      </button>
+      <button type="button" onclick="closePopup(false)">No</button>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const expenseTableBody = document.getElementById("expense-list");
+        const popup = document.getElementById("popup");
+        const btnSuccess = document.getElementById("btnSuccess");
+        let deleteExpenseId = null;
+
+        const ctx = document.getElementById("expenseChart").getContext("2d");
+        let expenseChart = new Chart(ctx, {
+          type: "pie",
+          data: {
+            labels: [],
+            datasets: [
+              {
+                label: "Expenses by Category",
+                data: [],
+                backgroundColor: [
+                  "rgba(51, 183, 220, 0.6)",
+                  "rgba(255, 0, 0, 0.6)",
+                  "rgba(164, 121, 12, 0.6)",
+                  "rgba(0, 186, 186, 0.6)",
+                  "rgba(85, 0, 255, 0.6)",
+                ],
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "top",
+              },
+              title: {
+                display: true,
+                text: "Expense Breakdown",
+                font: { size: 24, weight: "bold" },
+                color: "white",
+              },
+            },
+          },
+        });
+
+        function loadExpenses() {
+          expenseTableBody.innerHTML = "";
+          const expenses = (
+            JSON.parse(localStorage.getItem("expenses")) || []
+          ).sort((a, b) => new Date(a.date) - new Date(b.date));
+
+          expenses.forEach((expense) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+        <td>${expense.name}</td>
+        <td>₹${parseFloat(expense.amount).toFixed(2)}</td>
+        <td>${expense.category}</td>
+        <td>${expense.type}</td>
+        <td>${expense.date}</td>
+        <td>
+          <button class="edit-btn" data-id="${expense.id}">Edit</button>
+          <button class="delete-btn" data-id="${expense.id}">Delete</button>
+        </td>
+      `;
+            expenseTableBody.appendChild(row);
+          });
+
+          updateChart(expenses);
+          attachEventListeners();
+        }
+
+        function attachEventListeners() {
+          document.querySelectorAll(".edit-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              const id = parseInt(e.target.dataset.id);
+              const expenses =
+                JSON.parse(localStorage.getItem("expenses")) || [];
+              const expense = expenses.find((exp) => exp.id === id);
+              if (expense) {
+                localStorage.setItem("editExpense", JSON.stringify(expense));
+                window.location.href = "index.html";
+              }
+            });
+          });
+
+          document.querySelectorAll(".delete-btn").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              deleteExpenseId = parseInt(e.target.dataset.id);
+              popup.classList.add("active");
+            });
+          });
+        }
+
+        btnSuccess.addEventListener("click", () => {
+          let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+          expenses = expenses.filter((exp) => exp.id !== deleteExpenseId);
+          localStorage.setItem("expenses", JSON.stringify(expenses));
+          popup.classList.remove("active");
+          loadExpenses();
+        });
+
+        window.closePopup = function (confirmDelete) {
+          popup.classList.remove("active");
+          deleteExpenseId = null;
+        };
+
+        function updateChart(expenses) {
+          const categoryMap = {};
+
+          expenses.forEach((exp) => {
+            categoryMap[exp.category] =
+              (categoryMap[exp.category] || 0) + parseFloat(exp.amount);
+          });
+
+          const labels = Object.keys(categoryMap);
+          const data = Object.values(categoryMap);
+
+          expenseChart.data.labels = labels;
+          expenseChart.data.datasets[0].data = data;
+          expenseChart.update();
+        }
+
+        loadExpenses();
+      });
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const expenseTableBody = document.getElementById("expense-list");
+        const popup = document.getElementById("popup");
+        let deleteExpenseId = null;
+
+        function loadExpenses() {
+          expenseTableBody.innerHTML = "";
+          const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+
+          expenses.forEach((expense) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${expense.name}</td>
+              <td>₹${parseFloat(expense.amount).toFixed(2)}</td>
+              <td>${expense.category}</td>
+              <td>${expense.type}</td>
+              <td>${expense.date}</td>
+              <td>
+                <button class="edit-btn" data-id="${expense.id}">Edit</button>
+                <button class="delete-btn" data-id="${
+                  expense.id
+                }">Delete</button>
+              </td>
+            `;
+            expenseTableBody.appendChild(row);
+          });
+
+          attachEventListeners();
+        }
+
+        function attachEventListeners() {
+          document.querySelectorAll(".edit-btn").forEach((btn) => {
+            btn.addEventListener("click", handleEdit);
+          });
+
+          document.querySelectorAll(".delete-btn").forEach((btn) => {
+            btn.addEventListener("click", openDeletePopup);
+          });
+        }
+
+        function handleEdit(event) {
+          const expenseId = event.target.getAttribute("data-id");
+          const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+          const expense = expenses.find((exp) => exp.id == expenseId);
+          if (!expense) return;
+          localStorage.setItem("editExpense", JSON.stringify(expense));
+          window.location.href = "index.html";
+        }
+
+        function openDeletePopup(event) {
+          deleteExpenseId = event.target.getAttribute("data-id");
+          popup.classList.add("active");
+        }
+
+        function closePopup(confirmDelete) {
+          popup.classList.remove("active");
+
+          if (confirmDelete && deleteExpenseId) {
+            let expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+
+            const expenseToDelete = expenses.find(
+              (exp) => exp.id === Number(deleteExpenseId)
+            );
+
+            if (expenseToDelete) {
+              let debitTotal =
+                parseFloat(localStorage.getItem("debitTotal")) || 0;
+              let creditTotal =
+                parseFloat(localStorage.getItem("creditTotal")) || 0;
+
+              if (expenseToDelete.type === "debit") {
+                debitTotal -= parseFloat(expenseToDelete.amount);
+                localStorage.setItem("debitTotal", debitTotal);
+              } else {
+                creditTotal -= parseFloat(expenseToDelete.amount);
+                localStorage.setItem("creditTotal", creditTotal);
+              }
+
+              expenses = expenses.filter(
+                (exp) => exp.id !== Number(deleteExpenseId)
+              );
+              localStorage.setItem("expenses", JSON.stringify(expenses));
+              toastr.success("Expense deleted successfully!");
+              loadExpenses();
+            }
+          }
+
+          deleteExpenseId = null;
+        }
+
+        loadExpenses();
+        window.closePopup = closePopup;
+      });
+    </script>
+  </body>
+</html>

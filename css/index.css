@@ -1,0 +1,165 @@
+.content {
+  margin-left: 80px;
+  padding: 20px;
+}
+.small-home {
+  display: none;
+}
+
+.starter-home {
+  margin-top: 200px;
+  margin-bottom: 8px;
+}
+.name {
+  font-size: 32px;
+}
+.fullname {
+  font-weight: 700;
+  font-size: 44px;
+}
+.pro {
+  font-size: 32px;
+  margin-bottom: 16px;
+}
+.detail {
+  text-align: justify;
+  width: 80%;
+}
+
+.btn {
+  border: none;
+  border-radius: 16px;
+  padding: 14px;
+  margin: 10px 0;
+  transition: transform 0.3s ease;
+}
+.btn:hover {
+  transform: scale(1.1);
+}
+
+.typing-text {
+  white-space: nowrap;
+  font-size: 44px;
+  color: red;
+  overflow: hidden;
+  border-right: 2px solid;
+  display: inline-block;
+  vertical-align: bottom;
+  width: 17ch;
+  animation: typing 3s steps(14) forwards, blink 0.75s step-end infinite;
+}
+
+@keyframes typing {
+  0% {
+    width: 0;
+  }
+
+  50% {
+    width: 17ch;
+  }
+
+  100% {
+    width: 0;
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+@media (min-width: 768px) {
+  .content {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-left: 300px;
+  }
+}
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0;
+    padding: 10px;
+    display: block; /* Make sure it’s visible */
+  }
+
+  .myphoto {
+    display: none;
+  }
+
+  .small-home {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    border-radius: 12px;
+    margin-top: 0;
+    margin-bottom: -350px;
+  }
+  .starter-home {
+    display: none;
+  }
+  .name {
+    font-size: 24px;
+    margin: 10px 20px;
+    font-weight: 700;
+  }
+  .fullname{
+    font-size: 34px;
+    font-weight: 500;
+  }
+  .pro {
+    font-size: 24px;
+    margin: 0 20px;
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+  .typing-text {
+    font-weight: 700;
+    white-space: nowrap;
+    font-size: 24px;
+    color: red;
+    overflow: hidden;
+    border-right: 2px solid;
+    display: inline-block;
+    vertical-align: bottom;
+    width: 17ch;
+    animation: typing 3s steps(14) forwards, blink 0.75s step-end infinite;
+  }
+
+  @keyframes typing {
+    0% {
+      width: 0;
+    }
+
+    50% {
+      width: 17ch;
+    }
+
+    100% {
+      width: 0;
+    }
+  }
+
+  @keyframes blink {
+    50% {
+      border-color: transparent;
+    }
+  }
+  .typing-text {
+    color: red;
+  }
+  .detail {
+    text-align: justify;
+    margin: 10px;
+  }
+  .btn {
+    border: none;
+    color: white;
+    font-size: large;
+    border-radius: 16px;
+    padding: 8px;
+    margin: 10px;
+    background: linear-gradient(to right, rgb(90, 136, 169), rgb(27, 23, 40));
+  }
+}
